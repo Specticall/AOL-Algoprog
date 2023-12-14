@@ -6,6 +6,8 @@
 #define DATA_COUNT 8
 #define EXTRA_PADDING 5
 
+#define FILE_NAME "file.csv"
+
 const char heading[][CHAR_LIMIT] = {
   "Location", "City", "Price", "Rooms", "Bathrooms", "Carparks", "Type", "Furnish"
 };
@@ -42,6 +44,16 @@ int intlen(int input) {
 
 int abs(int input) {
   return input < 0 ? input * -1 : input;
+}
+
+char* toLowerCase(char* str) {
+  int strLength = strlen(str);
+  char* res = (char*)malloc(sizeof(char) * strLength);
+  for(int i = 0; i < strLength; i++) {
+    res[i] = 'A' <= str[i] && str[i] <= 'Z' ? (str[i] - 'A') + 'a' : str[i];
+  }
+  res[strLength] = '\0';
+  return res;
 }
 
 
@@ -176,6 +188,7 @@ int getLongestColumnWidth(Data* data, int length, int col) {
   return longest;
 }
 
+
 // kalo oop ini yg public methodnya buat print table
 void printTable(Data* data, int length) {
   if(data == NULL) {
@@ -245,7 +258,7 @@ Data* filterTable(Data* data, int length, char* query, int* resultCount) {
 
       switch(col) {
         case 0: {
-          isValid = includesSubstring(data[i].location1, query);
+          isValid = includesSubstring((data[i].location1), query);
           break;
         }
         case 1: {
@@ -300,13 +313,6 @@ Data* filterTable(Data* data, int length, char* query, int* resultCount) {
 
 
 // ================ SORT HANDLING ====================
-
-// void mergeMove(char* type, char* sortDirection) {
-//   switch(type) {
-//     case "Location":
-
-//   }
-// }
 
 void merge(Data* data, int left, int mid, int right, char* type, char* sortDirection) {
   int leftLen = mid - left + 1;
@@ -414,7 +420,7 @@ Data* sortTable(Data* data, int length, char* basedOn) {
 
 int main() {
   // Open the file
-  FILE* inputFile = fopen("file.csv", "r");
+  FILE* inputFile = fopen(FILE_NAME, "r");
   
   // Value buat nampung panjang datanya. Di pass jadi ref aja.
   int length = 0;
@@ -425,6 +431,8 @@ int main() {
 
   while(1) {
     int selected;
+    printBorder(24, '=');
+    printf("Joseph Christian Yusmita - 2702295695\n");
     printBorder(24, '=');
     printf("What do you want to do?\n");
     printBorder(24, '=');
@@ -481,7 +489,7 @@ int main() {
         scanf("%d",&rows); getchar();
 
         // Mesti bikin deep clone, soalnya mergesort yg dibikin itu ga pure, jadi dia mutate struct array awalnya. Harus di buat deep clone dlu, kalo cuman deepClone = result nanti jadinya shallow clone dan abis di sort tetep ke sort terus.
-        FILE* inputFile = fopen("file.csv", "r");
+        FILE* inputFile = fopen(FILE_NAME, "r");
         int length = 0;
         Data* deepClone = getFileData(&inputFile, &length);
 
