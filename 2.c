@@ -504,7 +504,17 @@ int main() {
       case 4: {
         char* fileName = (char*)malloc(sizeof(char) * CHAR_LIMIT);
         printf("File name: ");
-        scanf("%s", fileName);
+        scanf("%[^\n]", fileName); getchar();
+
+        int isValid = 1;
+        for(int i = 0; i < strlen(fileName); i++) {
+          if(fileName[i] == ' ') {
+            printf("File name cannot contain spaces!\n");
+            isValid = 0;
+            break;
+          }
+        }
+        if(!isValid) break;
 
         // Append .csv ke file name pake sprintf
         sprintf(fileName, "%s.csv", fileName);
