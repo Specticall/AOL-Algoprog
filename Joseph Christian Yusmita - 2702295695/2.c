@@ -122,20 +122,20 @@ Data* getFileData(FILE** inputFile, int* length) {
 
   // Scan dilakukan selama fscanf masih mereturn 8 (jumlah data yang berhasil di scan)
   while(fscanf(*inputFile, "%[^,],%[^,],%ld,%d,%d,%d,%[^,],%s\n", 
-    &result[*length].location1, 
-    &result[*length].location2, 
-    &result[*length].price, 
-    &result[*length].rooms, 
-    &result[*length].bathrooms, 
-    &result[*length].carParks, 
-    &result[*length].type, 
-    &result[*length].furnish) == DATA_COUNT) {
+    &result[*length - 1].location1, 
+    &result[*length - 1].location2, 
+    &result[*length - 1].price, 
+    &result[*length - 1].rooms, 
+    &result[*length - 1].bathrooms, 
+    &result[*length - 1].carParks, 
+    &result[*length - 1].type, 
+    &result[*length - 1].furnish) == DATA_COUNT) {
     
     // Menambahkan length data. Length menggunakan pointer agar dapat digunakan oleh function yang berada di luar scope.
     (*length)++;
 
     // Memory yang sudah di allocate di tambahkan / reallocate ukurannya agar dapat dimasukan data untuk iterasi berikutnya
-    result = (Data*)realloc(result, sizeof(Data) * (*length + 1));
+    result = (Data*)realloc(result, sizeof(Data) * (*length));
   }
 
   fclose(*inputFile);
@@ -436,7 +436,7 @@ Function untuk melakukan merging pada dua array. Function melakukan mutation pad
 
 @return {void}
 */
-void merge(Data* data, int left, int mid, int right, char* type, const char* sortDirection) {
+void merge(Data* data, int left, int mid, int right, char* type, char* sortDirection) {
   int leftLen = mid - left + 1;
   int rightLen = right - mid;
 
@@ -523,7 +523,7 @@ Function untuk melakukan mergSortpada dua array. Function melakukan mutation pad
 
 @return {void}
 */
-void mergeSort(Data* data, int left, int right, char* type, const char* sortDirection) {
+void mergeSort(Data* data, int left, int right, char* type, char* sortDirection) {
   if(left < right) {
     int mid = (right + left) / 2;
     mergeSort(data, left, mid, type, sortDirection);
